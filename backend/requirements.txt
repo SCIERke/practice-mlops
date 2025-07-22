@@ -1,0 +1,8 @@
+fastapi[standard]
+numpy
+pandas
+transformers
+torch
+torchvision
+torchaudio --index-url https://download.pytorch.org/whl/cu126 # CUDA 12.6
+uvicorn
