@@ -1,8 +1,37 @@
 @font-face {
-    font-family: 'Open Sans Variable';
+    font-family: Open Sans Variable;
     src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf') format('truetype');
     font-weight: 100 900;
     font-stretch: 75% 100%;
     font-style: normal;
     font-display: swap;
+}
+
+@font-face {
+    font-family: Sarabun;
+    src: url('/fonts/Sarabun/Sarabun-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Sarabun-Bold;
+    src: url('/fonts/Sarabun/Sarabun-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: Charm;
+    src: url('/fonts/Charm/Charm-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@theme {
+    /* Sarabun */
+    --font-sarabun: Sarabun, sans-serif;
+    --font-sarabun-bold: Sarabun-Bold, sans-serif;
+    /* Open-Sans */
+    --font-opensans: Open Sans Variable, sans-serif;
+    /* Charm */
+    --font-charm: Charm, sans-serif;
 }
