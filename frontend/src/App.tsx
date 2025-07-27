@@ -3,20 +3,36 @@ import type { Message } from './interfaces/Message';
 import ChatHeader from './components/ChatHeader';
 import ChatBox from './components/ChatBox';
 import MessageInput from './components/MessageInput';
-
-
-
-const tempData = `# ตัวอย่าง Markdown\n- [x] Task\n\`\`\`js\nconsole.log("Hi");\n\`\`\``;
+import { v4 as uuidv4 } from 'uuid';
+import { sendMessage } from './services/messageAPI';
 
 function App() {
   const [inputText, setInputText] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null!);
+  const messages: Message[] = [];
 
-  const messages: Message[] = [
-    { id: '1', role: 'user', content: 'สวัสดีครับ' },
-    { id: '2', role: 'system', content: tempData },
-    { id: '3', role: 'user', content: 'dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd' },
-  ];
+  const handleSubmit = async (inputText:string) => {
+    try {
+      if (inputText) {
+        const response = await sendMessage({
+          id: uuidv4(),
+          role:'user',
+          content: inputText,
+          userId: 'temp userId',
+        });
+        if (response?.status === 201) {
+          console.log('Create Success Re-Loading Data');
+        }
+      }
+    } catch (e) {
+      console.error("Error Submit Data:", e)
+    }
+  }
+
+  // useEffect(() => {
+
+  // })
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 
@@ -35,7 +51,7 @@ function App() {
         <ChatHeader />
         <main className="relative p-5 w-full h-full flex flex-col items-center">
           <ChatBox messages={messages} />
-          <MessageInput value={inputText} onChange={handleInputChange} textareaRef={textareaRef} />
+          <MessageInput value={inputText} onChange={handleInputChange} textareaRef={textareaRef} onClick={handleSubmit} />
         </main>
       </div>
     </div>
