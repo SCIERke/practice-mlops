@@ -3,3 +3,7 @@ export interface Message {
    role: string,
    content: string
 }
+
+export interface MessagePayload extends Message  {
+   userId: string,
+}
