@@ -7,3 +7,6 @@ class Message(BaseModel):
 
 class MessagePayload(Message):
   userId: str
+
+class MessageResponse(Message):
+  pass
