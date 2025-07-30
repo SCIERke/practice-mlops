@@ -1,0 +1,9 @@
+FROM pytorch/torchserve:latest
+
+RUN pip install huggingface_hub
+
+ENV TS_HOME=/home/torchserve
+WORKDIR ${TS_HOME}
+
+# Add huggingface login command and launcher in one bash command
+CMD ["python","-m","ts.llm_launcher","--model_id","TinyLlama/TinyLlama-1.1B-Chat-v1.0","--disable_token_auth"]
