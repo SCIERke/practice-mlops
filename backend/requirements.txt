@@ -1,7 +1,3 @@
 fastapi[standard]
-numpy
-pandas
-transformers
 pydantic
 python-dotenv
-llama-cpp-python
