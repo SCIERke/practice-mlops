@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import type { Message } from './interfaces/Message';
+import type { Message, MessagePayload} from './interfaces/Message';
 import ChatHeader from './components/ChatHeader';
 import ChatBox from './components/ChatBox';
 import MessageInput from './components/MessageInput';
@@ -9,25 +9,77 @@ import { sendMessage } from './services/messageAPI';
 function App() {
   const [inputText, setInputText] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null!);
-  const messages: Message[] = [];
+  const [messages, setMessages] = useState<Message[]>([]);
+  const dotStateRef = useRef(".");
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [isSending, setIsSending] = useState(false);
 
-  const handleSubmit = async (inputText:string) => {
+  const handleSubmit = async (inputText: string) => {
     try {
-      if (inputText) {
-        const response = await sendMessage({
-          id: uuidv4(),
-          role:'user',
-          content: inputText,
-          userId: 'temp userId',
-        });
-        if (response?.status === 201) {
-          console.log('Create Success Re-Loading Data');
+      if (isSending || !inputText.trim()) return;
+
+      setIsSending(true);
+
+      const payload: MessagePayload = {
+        id: uuidv4(),
+        role: 'user',
+        content: inputText,
+        userId: 'temp userId',
+      };
+
+      const { userId, ...messageWithoutUserId } = payload;
+      void userId;
+
+      setMessages(prev => [...prev, messageWithoutUserId]);
+      setInputText("");
+
+      const loadingMessageId = uuidv4();
+      setMessages(prev => [
+        ...prev,
+        {
+          id: loadingMessageId,
+          role: 'system',
+          content: "Loading.",
         }
+      ]);
+
+      dotStateRef.current = ".";
+      intervalRef.current = setInterval(() => {
+        dotStateRef.current = dotStateRef.current.length >= 3 ? "." : dotStateRef.current + ".";
+        setMessages(prev =>
+          prev.map(m =>
+            m.id === loadingMessageId ? { ...m, content: "Loading" + dotStateRef.current } : m
+          )
+        );
+      }, 500);
+
+      const response = await sendMessage(payload);
+
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        setIsSending(false)
+      }
+
+      setMessages(prev => prev.filter(m => m.id !== loadingMessageId));
+
+      if (response?.status === 201) {
+        setMessages(prev => [...prev, response.data]);
+        console.log('Create Success Re-Loading Data');
+      } else {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: uuidv4(), // error same id
+            role: 'system',
+            content: 'Error try to send message again!',
+          }
+        ]);
       }
     } catch (e) {
-      console.error("Error Submit Data:", e)
+      console.error("Error Submit Data:", e);
     }
-  }
+  };
 
   // useEffect(() => {
 
@@ -35,8 +87,6 @@ function App() {
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-
-
     setInputText(e.target.value);
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
