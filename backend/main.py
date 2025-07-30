@@ -3,7 +3,11 @@ import os
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
-from schemas.chat import MessagePayload
+import uuid
+
+from schemas.chat import MessagePayload ,MessageResponse
+import asyncio
+
 
 load_dotenv()
 DEVICE = os.getenv('DEVICE', 'cpu').lower()
@@ -37,9 +41,17 @@ app.add_middleware(
 def show_health_status():
   return {"status": "Yeah Yeah, It's working!"}
 
-@app.post("/message") # need to add response model
-def create_message(message_payload: MessagePayload):
+@app.post("/message", response_model=MessageResponse , status_code=201)
+async def create_message(message_payload: MessagePayload):
   messages = [
       {"role": "user", "content": message_payload.content},
   ]
-  return {"message": "outputs_decode"}
+  await asyncio.sleep(10)
+  # result = await inference_model(messages)
+  result = {
+    "id": str(uuid.uuid4()),
+    "role": "system",
+    "content": "OK I SEE <",
+  }
+
+  return result
