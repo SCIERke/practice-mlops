@@ -25,36 +25,36 @@ services:
     volumes:
       - ./backend:/app
       - /app/__pycache__
-    depends_on:
-      - vllm
+    # depends_on:
+    #   - vllm
     networks:
       - frontend
       - backend
 
-  vllm:
-    build:
-      context: ./inference-server/vllm
-      dockerfile: Dockerfile.dev
-      args:
-        HF_TOKEN: ${HUGGINGFACE_HUB_TOKEN}
-    runtime: nvidia
-    env_file:
-      - ./inference-server/.env
-    environment:
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
-    volumes:
-      - ./inference-server/.cache/huggingface:/root/.cache/huggingface
-    ports:
-      - "7000:8000"
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-    ipc: host
+  # vllm:
+  #   build:
+  #     context: ./inference-server/vllm
+  #     dockerfile: Dockerfile.dev
+  #     args:
+  #       HF_TOKEN: ${HUGGINGFACE_HUB_TOKEN}
+  #   runtime: nvidia
+  #   env_file:
+  #     - ./inference-server/.env
+  #   environment:
+  #     - NVIDIA_VISIBLE_DEVICES=all
+  #     - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+  #   volumes:
+  #     - ./inference-server/.cache/huggingface:/root/.cache/huggingface
+  #   ports:
+  #     - "7000:8000"
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: 1
+  #             capabilities: [gpu]♠6666♠
+  #   ipc: host
 
   # torch-serve-server:
   #   build:
