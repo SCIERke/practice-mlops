@@ -15,7 +15,6 @@ services:
 
 
   server:
-
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
@@ -27,20 +26,59 @@ services:
       - ./backend:/app
       - /app/__pycache__
     depends_on:
-      - db
+      - vllm
     networks:
       - frontend
       - backend
 
-
-  db:
-    image: chromadb/chroma
+  vllm:
+    build:
+      context: ./inference-server/vllm
+      dockerfile: Dockerfile.dev
+      args:
+        HF_TOKEN: ${HUGGINGFACE_HUB_TOKEN}
+    runtime: nvidia
+    env_file:
+      - ./inference-server/.env
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
     volumes:
-    - ./db/data:/chroma
+      - ./inference-server/.cache/huggingface:/root/.cache/huggingface
     ports:
-    - "5000:8000"
-    networks:
-      - backend
+      - "7000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    ipc: host
+
+  # torch-serve-server:
+  #   build:
+  #     context: ./inference-server/torchserve/
+  #     dockerfile: Dockerfile.dev
+  #   env_file:
+  #     - ./inference-server/torchserve/.env
+  #   ports:
+  #     - "8080:8080"
+  #     - "8081:8081"
+  #     - "8082:8082"
+  #   volumes:
+  #     - ./inference/models:/home/model-server/model-store
+  #   networks:
+  #     - backend
+
+  # db:
+  #   image: chromadb/chroma
+  #   volumes:
+  #   - ./db/data:/chroma
+  #   ports:
+  #   - "5000:8000"
+  #   networks:
+  #     - backend
 
 networks:
   frontend:
