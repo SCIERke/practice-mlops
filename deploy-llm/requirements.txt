@@ -1,0 +1,9 @@
+transformers
+onnx
+onnxruntime
+optimum
+pathlib
+
+torch
+torchserve
+torch-model-archiver
