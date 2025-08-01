@@ -54,6 +54,7 @@ function App() {
       }, 500);
 
       const response = await sendMessage(payload);
+      console.log(response)
 
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -80,11 +81,6 @@ function App() {
       console.error("Error Submit Data:", e);
     }
   };
-
-  // useEffect(() => {
-
-  // })
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value);
