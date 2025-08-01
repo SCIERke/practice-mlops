@@ -29,3 +29,7 @@ __pycache__/
 
 # Models
 models/*
+
+local_models/*
+
+.cache
