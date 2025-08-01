@@ -2,23 +2,10 @@ from fastapi import FastAPI
 import os
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-
-import uuid
-
 from schemas.chat import MessagePayload ,MessageResponse
-import asyncio
-
+from services.inference import get_inference
 
 load_dotenv()
-DEVICE = os.getenv('DEVICE', 'cpu').lower()
-MODEL_NAME = os.getenv("MODEL_NAME" ,"Qwen/Qwen3-1.7B-Base")
-CACHE_DIR = os.getenv("CACHE_DIR" , "./models")
-
-if DEVICE not in ['cpu', 'cuda']:
-    DEVICE = 'cpu'
-
-model_bundle = {}
-
 app = FastAPI()
 
 """
@@ -37,21 +24,59 @@ app.add_middleware(
   DEV ONLY
 """
 
-@app.get("/health-check") # need to add response model
+@app.get("/health-check")
 def show_health_status():
   return {"status": "Yeah Yeah, It's working!"}
 
-@app.post("/message", response_model=MessageResponse , status_code=201)
+@app.post("/message", response_model=MessageResponse, status_code=201)
 async def create_message(message_payload: MessagePayload):
-  messages = [
-      {"role": "user", "content": message_payload.content},
-  ]
-  await asyncio.sleep(10)
-  # result = await inference_model(messages)
-  result = {
-    "id": str(uuid.uuid4()),
-    "role": "system",
-    "content": "OK I SEE <",
-  }
+    print(f"Received content: {message_payload.content}")
+    return await get_inference(message_payload.content)
 
-  return result
+# @app.post("/message", response_model=MessageResponse, status_code=201)
+# async def create_message(message_payload: MessagePayload):
+#     print(f"Received content: {message_payload.content}")
+#     print(f"Sending request to: {INFERENCE_URL}")
+
+#     data = {"content": message_payload.content}
+
+#     async with httpx.AsyncClient() as client:
+#         try:
+#             response = await client.post(INFERENCE_URL, json=data, timeout=10.0)
+#             response.raise_for_status()
+#         except httpx.HTTPStatusError as exc:
+#             return MessageResponse(
+#                 id=str(uuid.uuid4()),
+#                 role="system",
+#                 error=f"Error response {exc.response.status_code}: {exc.response.text}"
+#             )
+#         except httpx.RequestError as exc:
+#             return MessageResponse(
+#                 id=str(uuid.uuid4()),
+#                 role="system",
+#                 error=f"Request error: {str(exc)}"
+#             )
+
+#     try:
+#         data = response.json()
+#     except Exception:
+#         return MessageResponse(
+#             id=str(uuid.uuid4()),
+#             role="system",
+#             error="Invalid JSON response from inference server"
+#         )
+
+#     if not isinstance(data, list) or len(data) == 0 or "label" not in data[0]:
+#         return MessageResponse(
+#             id=str(uuid.uuid4()),
+#             role="system",
+#             error="Malformed response data"
+#         )
+
+#     label = data[0]["label"]
+
+#     return MessageResponse(
+#         id=str(uuid.uuid4()),
+#         role="system",
+#         content=label
+#     )
