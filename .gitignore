@@ -36,3 +36,5 @@ local_models/*
 
 *.pem
 *.ppk
+
+question.txt
