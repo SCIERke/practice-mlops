@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+  labels:
+    name: server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: server
+  template:
+    metadata:
+      labels:
+        run: server
+    spec:
+      containers:
+        - image:  pee0982817150/devops-practice-backend:latest
+          name:  server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    run: server
+  ports:
+    - port: 8000
+      targetPort: 8000
