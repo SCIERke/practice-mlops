@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: app-deployment
   labels:
     name: app
 spec:
@@ -23,11 +23,17 @@ spec:
             cpu: 500m
           requests:
             cpu: 200m
+        env:
+          - name:
+            valueFrom:
+              secretKeyRef:
+                name:  name
+                key:  key
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
+  name: app-service
   labels:
     run: app
 spec:
