@@ -9,14 +9,14 @@ spec:
   - host: dev.local
     http:
       paths:
-      - paths: /?(.*)
+      - path: /?(.*)
         pathType: Prefix
         backend:
           service:
             name: app-service
             port:
               number: 80
-      - paths: /api/?(.*)
+      - path: /api/?(.*)
         pathType: Prefix
         backend:
           service:

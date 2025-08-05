@@ -23,12 +23,12 @@ spec:
             cpu: 500m
           requests:
             cpu: 200m
-        env:
-          - name:
-            valueFrom:
-              secretKeyRef:
-                name:  name
-                key:  key
+        # env:
+        #   - name:
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name:  name
+        #         key:  key
 ---
 apiVersion: v1
 kind: Service
