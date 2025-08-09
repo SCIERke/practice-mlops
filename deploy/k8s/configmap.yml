@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: all-config
+data:
+  VITE_API_URL: http://dev.local/api/message
+  INFERENCE_URL: http://dev.local/inference/predict
