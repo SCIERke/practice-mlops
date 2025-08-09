@@ -1,3 +1,4 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,15 +16,20 @@ spec:
     spec:
       containers:
       - name: app
-        image: pee0982817150/devops-practice-frontend
+        image: pee0982817150/devops-practice-frontend:v2
         ports:
         - containerPort: 80
-        env:
-          - name: VITE_API_URL
-            valueFrom:
-              configMapKeyRef:
-                name:  all-config
-                key:  VITE_API_URL
+        volumeMounts:
+        - name: config-volume
+          mountPath: /usr/share/nginx/html/config.json
+          subPath: config.json
+      volumes:
+      - name: config-volume
+        configMap:
+          name: all-config
+          items:
+          - key: config.json
+            path: config.json
 ---
 apiVersion: v1
 kind: Service
