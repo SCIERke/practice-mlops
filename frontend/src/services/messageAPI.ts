@@ -1,9 +1,10 @@
 import axios from 'axios';
-import type { MessagePayload } from '../interfaces/Message'
+import type { MessagePayload } from '../interfaces/Message';
+import { getApiUrl } from './config';
 
-export const sendMessage = async ( messageData: MessagePayload) => {
+export const sendMessage = async ( messageData: MessagePayload ) => {
   try {
-      const response = await axios.post(import.meta.env.VITE_API_URL, messageData,{
+      const response = await axios.post(getApiUrl(), messageData,{
         headers: {
           'Content-Type': 'application/json'
         }
