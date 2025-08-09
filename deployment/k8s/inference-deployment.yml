@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference-deployment
+  labels:
+    name: inference
+spec:
+  selector:
+    matchLabels:
+      run: inference
+  template:
+    metadata:
+      labels:
+        run: inference
+    spec:
+      containers:
+        - image: pee0982817150/devops-practice-inference
+          name: my-name
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inference-service
+  labels:
+    run: inference
+spec:
+  selector:
+    run: inference
+  ports:
+    - port: 8000
+      targetPort: 8000
