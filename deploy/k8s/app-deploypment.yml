@@ -18,17 +18,12 @@ spec:
         image: pee0982817150/devops-practice-frontend
         ports:
         - containerPort: 80
-        resources:
-          limits:
-            cpu: 500m
-          requests:
-            cpu: 200m
-        # env:
-        #   - name:
-        #     valueFrom:
-        #       secretKeyRef:
-        #         name:  name
-        #         key:  key
+        env:
+          - name: VITE_API_URL
+            valueFrom:
+              configMapKeyRef:
+                name:  all-config
+                key:  VITE_API_URL
 ---
 apiVersion: v1
 kind: Service
