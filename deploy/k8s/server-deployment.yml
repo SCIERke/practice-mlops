@@ -17,6 +17,13 @@ spec:
       containers:
         - image:  pee0982817150/devops-practice-backend:latest
           name:  server
+          env:
+          - name: INFERENCE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: all-config
+                key: INFERENCE_URL
+
 ---
 apiVersion: v1
 kind: Service
