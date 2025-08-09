@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: all-config
+data:
+  INFERENCE_URL: http://inference-service:8000/predict
+  config.json: |
+    {
+    "SERVER_API_URL": "/api/message"
+    }
