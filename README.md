@@ -12,6 +12,7 @@ In backend ,frontend ,infernece , will have 2 Dockerfile that is for dev and dep
 
 Each of the `backend`, `frontend`, and `inference-server` folders includes two Dockerfiles: one for development and one for production deployment.
 
+
 # Setting Up
 
 ## Development
@@ -41,4 +42,4 @@ If you plan to deploy on cloud Kubernetes platforms, please consider:
 
 ---
 
-The detailed Kubernetes manifests and deployment instructions can be found in the [`deployment`](./deployment) folder.z 
+The detailed Kubernetes manifests and deployment instructions can be found in the [`deployment`](./deployment) folder.z

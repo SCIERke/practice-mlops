@@ -1,42 +1,51 @@
 # Running the Cluster with Minikube
-
-Follow the steps below to set up and run the cluster locally using Minikube.
+Follow the steps below to set up and run the Kubernetes cluster locally using Minikube.
 
 ## 1. Start the Minikube Cluster
 ```bash
 minikube start
 ```
-##  2. Enable the Ingress Add-on
+## 2. Enable the Ingress Add-on
 ```bash
 minikube addons enable ingress
 ```
-
-##  2.5 Enable the Metric-server Add-on
+## 3. Enable the Metrics Server Add-on
 ```bash
 minikube addons enable metrics-server
 ```
-
-## 3. Deploy Application Components
-From the deployment directory, apply all Kubernetes manifests
+## 4. Deploy Application Components
+From the `deployment` directory, apply all Kubernetes manifests:
 ```bash
 kubectl apply -f .
 ```
-## 4. Create Tunnel
-This will expose the LoadBalancer services to your local machine:
+## 5. Create Minikube Tunnel
+This exposes LoadBalancer services to your local machine:
 ```bash
 minikube tunnel
 ```
+## 6. Setup Hosts File
+Add the appropriate host entries in your local machine's hosts file to map the service domain, e.g.:
+```bash
+127.0.0.1 dev.local
+```
+## 7. Add Prometheus Helm Repository
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+```
+## 8. Install Prometheus Stack with Helm
+```bash
+helm install monitoring prometheus-community/kube-prometheus-stack
+```
+## 9. Access Prometheus
+You can either port-forward or expose Prometheus service externally to query metrics:
+```bash
+kubectl port-forward svc/monitoring-kube-prometheus-prometheus 9090:9090
+```
+Then access Prometheus at: [http://localhost:9090](http://localhost:9090)
 
-## 5.
-helm add prometheus repo
+Once the tunnel is running and hosts are set, the main application will be accessible at:
+[http://dev.local](http://dev.local)
 
-## 6.
-helm install prothemus/kube-prometheus-stack
-
-## 7.
-port forward or node export prometheus and then query from it
-
-
-
-Once the tunnel is running, the application will be accessible at:
-http://dev.local
+# Project Structure
+![structure](../assets/structure.png)
