@@ -2,7 +2,6 @@
 In this project, there is many part of it which i seperate it into folder which look like this
 
 ```markdown
----
   |= backend ( Contains the full source code for the API logic and server implementation, built with **FastAPI** )
   |- deploy-llm ( Experimental workspace where various AI deployment tools and frameworks are tested, including **vLLM**, **Triton**, and **TorchServe** )
   |- deployment ( Contains Kubernetes configuration files along with detailed instructions on how to build and deploy the project )
