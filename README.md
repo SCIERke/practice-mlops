@@ -4,15 +4,15 @@ In this project, there is many part of it which i seperate it into folder which 
 ```
 .
 ├── backend/
-│   **Contains the full source code for the API logic and server implementation, built with FastAPI**
+│       Contains the full source code for the API logic and server implementation, built with FastAPI
 ├── deploy-llm/
-│   **Experimental workspace for AI deployment tools (vLLM, Triton, TorchServe)**
+│       Experimental workspace for AI deployment tools (vLLM, Triton, TorchServe)
 ├── deployment/
-│   **Kubernetes configuration files and deployment instructions**
+│       Kubernetes configuration files and deployment instructions
 ├── frontend/
-│   **Web client implemented with Vite + React for chat-based UI**
+│       Web client implemented with Vite + React for chat-based UI
 └── inference-server/
-    **Dedicated AI inference server that scales independently**
+        Dedicated AI inference server that scales independently
 ```
 
 In backend ,frontend ,infernece , will have 2 Dockerfile that is for dev and deployment
